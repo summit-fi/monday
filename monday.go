@@ -501,11 +501,17 @@ func fillKnownPeriods(src map[string]string, locale Locale) {
 // Thus, some transformations for some languages may be a bit more complex than just plain replacements.
 func Format(dt time.Time, layout string, locale Locale) string {
 	fm := dt.Format(layout)
+	return FormatString(fm, layout, locale)
+}
+
+// FormatString is like Format, but it receives a string as an input
+// This can be usefule for text-to-text transformation without constructing a spearate time object
+func FormatString(input string, layout string, locale Locale) string {
 	intFunc, ok := internalFormatFuncs[locale]
 	if !ok {
-		return fm
+		return input
 	}
-	return intFunc(fm, layout)
+	return intFunc(input, layout)
 }
 
 // ParseInLocation is the standard time.ParseInLocation wrapper, which replaces
